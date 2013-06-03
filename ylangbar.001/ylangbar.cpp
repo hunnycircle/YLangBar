@@ -79,7 +79,7 @@ void
 ylb_state( const HWND inHwnd )
 {
 	HWND	hwnd ;
-
+	
 	if( (hwnd = ImmGetDefaultIMEWnd( inHwnd )) == NULL ) {
 		DEBUGLOG_PRINT_VALUE( "ImmGetDefaultIMEWnd()", GetLastError() ) ;
 		return ;
