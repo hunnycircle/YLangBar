@@ -58,6 +58,7 @@ ylb_terminate( HMENU *ioMenu )
 void
 ylb_popup( const HWND inHwnd, const HMENU inMenu )
 {
+	::SetForegroundWindow(inHwnd); //Q135788
 	POINT		point ;
 
 	DEBUGLOG_ENTER_FUNCTION( "ylb_popup()" ) ;
@@ -70,6 +71,7 @@ ylb_popup( const HWND inHwnd, const HMENU inMenu )
 	TrackPopupMenuEx( inMenu, TPM_CENTERALIGN | TPM_VCENTERALIGN, point.x, point.y, inHwnd, NULL) ;
 
 	DEBUGLOG_RETURN_FUNCTION( "ylb_popup()" ) ;
+	::PostMessage(inHwnd, WM_NULL, 0, 0); //Q135788
 }
 
 
