@@ -28,11 +28,22 @@ static LRESULT		mainWindowProc( HWND, UINT, UINT, LONG ) ;
 #define				YLB_WM_NOTIFYICON		(WM_USER + 100)
 #define				NOTIFY_RETRY					(15)
 #define				NOTIFY_INTERVAL				(2000)
-#define				TIMER_INTERVAL				(300)
 
 HWND				g_hWnd			= NULL ;
 HMENU				g_hMenu			= NULL ;
 
+// タイマー設定
+static int GetTimerInterval()
+{
+	static int interval = 0;
+	if(interval == 0){
+		// カレントディレクトリの ylangbar.ini から設定を読み取る
+		char szIniPath[_MAX_PATH] = "";
+		::GetFullPathName("ylangbar.ini", _countof(szIniPath), szIniPath, NULL);
+		interval = ::GetPrivateProfileInt("ylangbar", "interval", 300, szIniPath);
+	}
+	return interval;
+}
 
 static LRESULT mainWindowProc( HWND inHwnd, UINT inMsg, UINT wParam, LONG lParam )
 {
@@ -64,7 +75,7 @@ static LRESULT mainWindowProc( HWND inHwnd, UINT inMsg, UINT wParam, LONG lParam
 
 		case YLB_WM_NOTIFYICON :
 		{
-			if( lParam == WM_LBUTTONUP ) {
+			if( lParam == WM_LBUTTONUP || lParam == WM_RBUTTONUP ) {
 				ylb_popup( g_hWnd, g_hMenu ) ;
 			}
 		}
@@ -129,7 +140,7 @@ int WINAPI WinMain( HINSTANCE inInst, HINSTANCE inPrevInst, LPSTR inLPCmdLine, i
 			throw SystemException( GetLastError() ) ;
 		}
 
-		if( (timer = SetTimer( g_hWnd, NULL, TIMER_INTERVAL, NULL )) == NULL ) {
+		if( (timer = SetTimer( g_hWnd, NULL, GetTimerInterval(), NULL )) == NULL ) {
 			throw SystemException( GetLastError() ) ;
 		}
 
