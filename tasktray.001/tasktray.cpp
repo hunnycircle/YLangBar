@@ -39,6 +39,7 @@ tasktray_addIcon( const HWND inHwnd, const HINSTANCE inInst, UINT inIcon, UINT i
 	nid.uFlags = (NIF_MESSAGE | NIF_ICON | NIF_TIP) ;
 	nid.uCallbackMessage = inMessageID ;
 	nid.hIcon = LoadIcon( inInst, (LPCSTR)inIcon ) ;
+	strcpy(nid.szTip, "YLangBar");
 
 	for( i=0 ; i < inRetry ; i++ ) {
 		if( Shell_NotifyIcon( NIM_ADD, &nid ) == TRUE ) {
